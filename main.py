@@ -6,11 +6,8 @@ app = FastAPI()
 
 app.include_router(user_route.router)
 
-@app.get("/")
+@app.get("/", status_code=200)
 def main():
-    return JSONResponse(
-        status_code=200,
-        content={
+    return {
             "message": "Hello world"
         }
-    )
