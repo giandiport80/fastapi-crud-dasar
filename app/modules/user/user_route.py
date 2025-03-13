@@ -55,3 +55,26 @@ def store(user: UserRequest, db: Session = Depends(get_db)):
         "message": "Data berhasil disimpan",
         "data": new_user
     }
+
+
+@router.delete("/users/{id}", status_code=200)
+def delete(id: int, db: Session = Depends(get_db)):
+    deleted_user = user_repository.delete(id, db)
+
+    if not deleted_user:
+        return JSONResponse(
+            status_code=404,
+            content={
+                "success": False,
+                "message": "Data tidak ditemukan"
+            }
+        )
+
+    return {
+        "success": True,
+        "message": "Data berhasil dihapus"
+    }
+
+
+
+

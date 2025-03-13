@@ -48,3 +48,14 @@ def cek_email_exist(email: str, db: Session) -> bool:
     return db.query(User).filter(User.email == email).first() is not None
 
 
+def delete(id: int, db: Session):
+    user = db.query(User).filter(User.id == id).first()
+
+    if not user:
+        return None
+
+    db.delete(user)
+    db.commit()
+
+    return user
+
