@@ -1,8 +1,6 @@
 from pydantic import BaseModel
 
-class UserResponse(BaseModel):
-    id: int
+class UserRequest(BaseModel):
     name: str
     email: str
     password: str
-

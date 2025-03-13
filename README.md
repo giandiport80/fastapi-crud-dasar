@@ -1,7 +1,7 @@
 
 Instalasi
 ```
-pip install fastapi[standard] fastapi-cli sqlalchemy pymysql
+pip install fastapi[standard] fastapi-cli sqlalchemy pymysql passlib[bcrypt]
 ```
 
 menjalankan aplikasi
