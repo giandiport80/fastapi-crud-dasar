@@ -38,7 +38,7 @@ def find_by_id(id: int, db: Session = Depends(get_db)):
     }
 
 
-@router.post("/users", status_code=201)
+@router.post("/users", tags=["Users"], status_code=201)
 def store(user: UserRequest, db: Session = Depends(get_db)):
     if user_repository.cek_email_exist(user.email, db):
         return JSONResponse(
@@ -58,7 +58,7 @@ def store(user: UserRequest, db: Session = Depends(get_db)):
 
 
 
-@router.put("/users/{id}", status_code=200)
+@router.put("/users/{id}", tags=["Users"], status_code=200)
 def update(id: int, user_data: UserUpdateRequest, db: Session = Depends(get_db)):
     updated_user = user_repository.update(id, user_data, db)
 
@@ -78,7 +78,7 @@ def update(id: int, user_data: UserUpdateRequest, db: Session = Depends(get_db))
     }
 
 
-@router.delete("/users/{id}", status_code=200)
+@router.delete("/users/{id}", tags=["Users"], status_code=200)
 def delete(id: int, db: Session = Depends(get_db)):
     deleted_user = user_repository.delete(id, db)
 
