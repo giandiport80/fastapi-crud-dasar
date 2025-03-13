@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field, field_validator
-import re
+
+from app.handlers.handler import validate_no_html
 
 
 class UserRequest(BaseModel):
@@ -7,10 +8,11 @@ class UserRequest(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=6)
 
-    @field_validator("name")
-    @classmethod
-    def validate_no_html(cls, value):
-        """Pastikan field tidak mengandung tag HTML"""
-        if re.search(r"<[^>]*>", value):
-            raise ValueError("Tidak boleh mengandung tag HTML")
-        return value
+    _validate_no_html = field_validator("name", "email")(validate_no_html)
+
+
+class UserUpdateRequest(BaseModel):
+    name: str = Field(..., min_length=3)
+    email: EmailStr
+
+    _validate_no_html = field_validator("name", "email")(validate_no_html)

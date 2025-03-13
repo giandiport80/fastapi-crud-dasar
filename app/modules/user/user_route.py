@@ -5,12 +5,12 @@ from starlette.responses import JSONResponse
 
 from app.config.database import get_db
 from app.modules.user import user_repository
-from app.modules.user.user_schema import UserRequest
+from app.modules.user.user_schema import UserRequest, UserUpdateRequest
 
 router = APIRouter()
 
 @router.get("/users", tags=["Users"], status_code=200)
-def get_index_users(db: Session = Depends(get_db)):
+def get_list(db: Session = Depends(get_db)):
     data = user_repository.get_users(db)
 
     return {
@@ -54,6 +54,27 @@ def store(user: UserRequest, db: Session = Depends(get_db)):
         "success": True,
         "message": "Data berhasil disimpan",
         "data": new_user
+    }
+
+
+
+@router.put("/users/{id}", status_code=200)
+def update(id: int, user_data: UserUpdateRequest, db: Session = Depends(get_db)):
+    updated_user = user_repository.update(id, user_data, db)
+
+    if not updated_user:
+        return JSONResponse(
+            status_code=404,
+            content={
+                "success": False,
+                "message": "User tidak ditemukan"
+            }
+        )
+
+    return {
+        "success": True,
+        "message": "Data berhasil disimpan",
+        "data": updated_user
     }
 
 

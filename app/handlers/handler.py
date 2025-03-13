@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+import re
 
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     errors = []
@@ -19,3 +20,9 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         }
     )
 
+
+def validate_no_html(value: str) -> str:
+    """Pastikan field tidak mengandung tag HTML"""
+    if re.search(r"<[^>]*>", value):
+        raise ValueError("Tidak boleh mengandung tag HTML")
+    return value

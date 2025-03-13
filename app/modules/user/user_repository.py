@@ -1,12 +1,10 @@
-import datetime
-
 from sqlalchemy.orm import Session
 
-from app.helpers.helper import hashing_bcrypt
+from app.helpers.helper import hashing_bcrypt, timestamp
 from app.modules.user.user_model import User
 from sqlalchemy import select
 
-from app.modules.user.user_schema import UserRequest
+from app.modules.user.user_schema import UserRequest, UserUpdateRequest
 
 
 def _field():
@@ -34,8 +32,8 @@ def create(user: UserRequest, db: Session):
         name=user.name,
         email=user.email,
         password=hashing_bcrypt(user.password),
-        created_at=datetime.datetime.utcnow(),
-        updated_at=datetime.datetime.utcnow(),
+        created_at=timestamp(),
+        updated_at=timestamp(),
     )
     db.add(new_user)
     db.commit()
@@ -59,3 +57,17 @@ def delete(id: int, db: Session):
 
     return user
 
+
+def update(id: int, user_data: UserUpdateRequest, db: Session):
+    user = db.query(User).filter(User.id == id).first()
+
+    if not user:
+        return None
+
+    user.name = user_data.name
+    user.email = user_data.email
+    user.updated_at = timestamp()
+
+    db.commit()
+    db.refresh(user)
+    return user
