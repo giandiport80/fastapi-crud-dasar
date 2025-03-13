@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
@@ -40,6 +40,14 @@ def find_by_id(id: int, db: Session = Depends(get_db)):
 
 @router.post("/users", status_code=201)
 def store(user: UserRequest, db: Session = Depends(get_db)):
+    if user_repository.cek_email_exist(user.email, db):
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "message": "Email sudah digunakan"
+            })
+
     new_user = user_repository.create(user, db)
 
     return {

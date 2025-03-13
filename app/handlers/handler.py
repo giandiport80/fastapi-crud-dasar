@@ -14,7 +14,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         status_code=400,
         content={
             "success": False,
-            "message": "The given data was invalid.",
+            "message": "Data yang dikirimkan tidak valid atau tidak lengkap.",
             "errors": errors
         }
     )

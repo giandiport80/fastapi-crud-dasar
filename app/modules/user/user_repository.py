@@ -44,4 +44,7 @@ def create(user: UserRequest, db: Session):
     return new_user
 
 
+def cek_email_exist(email: str, db: Session) -> bool:
+    return db.query(User).filter(User.email == email).first() is not None
+
 
